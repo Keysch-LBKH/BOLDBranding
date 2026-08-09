@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/modernist-26f5ba40-e2c6-4490-9de0-03a20e68eba0/styles.css">
+  <script src="_ds/modernist-26f5ba40-e2c6-4490-9de0-03a20e68eba0/_ds_bundle.js"></script>
+  <style>
+    :root{
+      --color-accent: #f2790f; --color-accent-2: #f2790f;
+      --color-accent-100: #fff4e8; --color-accent-200: #ffe3c2; --color-accent-300: #ffc98c;
+      --color-accent-400: #ffa94f; --color-accent-500: #f2790f; --color-accent-600: #d9640a;
+      --color-accent-700: #a94e08; --color-accent-800: #7a3a08; --color-accent-900: #4a2405;
+      --color-accent-2-100: #fff4e8; --color-accent-2-200: #ffe3c2; --color-accent-2-300: #ffc98c;
+      --color-accent-2-400: #ffa94f; --color-accent-2-500: #f2790f; --color-accent-2-600: #d9640a;
+      --color-accent-2-700: #a94e08; --color-accent-2-800: #7a3a08; --color-accent-2-900: #4a2405;
+    }
+    :root[data-theme="dark"]{
+      --color-bg: #171514; --color-surface: #211f1e; --color-text: #f3f1ef;
+      --color-divider: color-mix(in srgb, #f3f1ef 30%, transparent);
+      --color-neutral-100: #2d2b2b; --color-neutral-200: #444141; --color-neutral-300: #605d5d;
+      --color-neutral-400: #7d7979; --color-neutral-500: #9b9797; --color-neutral-600: #bab6b6;
+      --color-neutral-700: #d7d3d3; --color-neutral-800: #eae7e7; --color-neutral-900: #f8f4f4;
+    }
+    a { color: var(--color-accent-700); }
+    a:hover { color: var(--color-accent); }
+  </style>
+  <style>
+    body{margin:0;background:var(--color-neutral-200);}
+    input,textarea{font-family:var(--font-body);}
+    ::-webkit-scrollbar{display:none}
+    @keyframes om-spin{to{transform:rotate(360deg);}}
+    @keyframes narrowDemoSwing{0%,100%{transform:translateX(0) rotate(0deg);}25%{transform:translateX(22px) rotate(7deg);}50%{transform:translateX(0) rotate(0deg);}75%{transform:translateX(-22px) rotate(-7deg);}}
+    .narrow-demo-card{animation:narrowDemoSwing 3s ease-in-out infinite;}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-neutral-200);display:flex;justify-content:center;padding:24px 12px;box-sizing:border-box;">
+<div style="width:100%;max-width:430px;background:var(--color-bg);min-height:844px;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);">
+
+  <div style="padding:20px 20px 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <img src="assets/lbkh-logo.png" alt="LBKH Solutions" style="width:22px;height:22px;object-fit:contain;"></img>
+        <div style="font:700 13px/1 var(--font-heading);letter-spacing:0.02em;text-transform:uppercase;color:var(--color-text);">LBKH Solutions</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button onClick="{{ onToggleTheme }}" style="border:2px solid var(--color-text);background:none;font:600 10px var(--font-body);text-transform:uppercase;letter-spacing:0.04em;color:var(--color-text);cursor:pointer;padding:4px 8px;">{{ themeLabel }}</button>
+        <button onClick="{{ resetAll }}" style="border:none;background:none;font:600 11px var(--font-body);color:var(--color-neutral-700);cursor:pointer;padding:4px 0;">Start Over</button>
+      </div>
+    </div>
+    <div style="margin-top:14px;font:600 10px/1 var(--font-body);letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);">{{ stepLabel }}</div>
+    <div style="margin-top:8px;height:2px;background:var(--color-neutral-300);width:100%;">
+      <div style="height:2px;background:var(--color-accent);width:{{ progressPct }}%;"></div>
+    </div>
+  </div>
+
+  <div id="guide-scroll" style="flex:1;overflow-y:auto;padding:20px;box-sizing:border-box;">
+
+    <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:20px;padding-top:24px;">
+        <div style="height:2px;background:var(--color-accent);width:56px;"></div>
+        <div style="font:700 28px/1.1 var(--font-heading);color:var(--color-text);">Let's get your details.</div>
+        <div style="font:400 14px/1.5 var(--font-body);color:var(--color-neutral-700);">We'll use this to personalize your Brand Guide and, if you choose, send it to you when it's done.</div>
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:18px;display:flex;flex-direction:column;gap:14px;">
+          <div class="field">
+            <label>Your name</label>
+            <input class="input" type="text" placeholder="Jane Smith" value="{{ contact.yourName }}" onChange="{{ onContactYourNameChange }}"></input>
+          </div>
+          <div class="field">
+            <label>Phone number</label>
+            <input class="input" type="tel" placeholder="(555) 123-4567" value="{{ contact.phone }}" onChange="{{ onContactPhoneChange }}"></input>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input class="input" type="email" placeholder="jane@business.com" value="{{ contact.email }}" onChange="{{ onContactEmailChange }}"></input>
+          </div>
+          <div class="field">
+            <label>Business name</label>
+            <input class="input" type="text" placeholder="Smith & Co." value="{{ contact.businessName }}" onChange="{{ onContactBusinessNameChange }}"></input>
+          </div>
+          <div class="field">
+            <label>Website</label>
+            <input class="input" type="text" placeholder="www.smithandco.com" value="{{ contact.website }}" onChange="{{ onContactWebsiteChange }}"></input>
+          </div>
+          <div class="field">
+            <label>Main social (we'll follow)</label>
+            <input class="input" type="text" placeholder="@smithandco" value="{{ contact.social }}" onChange="{{ onContactSocialChange }}"></input>
+          </div>
+        </div>
+        <button onClick="{{ onIntroNext }}" class="btn btn-primary btn-block" disabled="{{ !introComplete }}" style="margin-top:8px;">Continue</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showWelcome }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:24px;padding-top:24px;">
+        <div style="height:2px;background:var(--color-accent);width:56px;"></div>
+        <div style="font:700 34px/1.05 var(--font-heading);color:var(--color-text);">Define your business values.</div>
+        <div style="font:400 15px/1.6 var(--font-body);color:var(--color-neutral-700);">A guided workbook for reviewing your business's experience, brainstorming what matters, narrowing to what's essential, and leaving with a clear Values Statement you can share with your team.</div>
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:20px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:12px;align-items:baseline;"><div style="font:700 13px var(--font-heading);color:var(--color-accent-700);width:20px;">01</div><div style="font:500 13px var(--font-body);color:var(--color-text);">Life Experience Review</div></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><div style="font:700 13px var(--font-heading);color:var(--color-accent-700);width:20px;">02</div><div style="font:500 13px var(--font-body);color:var(--color-text);">Brainstorm</div></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><div style="font:700 13px var(--font-heading);color:var(--color-accent-700);width:20px;">03</div><div style="font:500 13px var(--font-body);color:var(--color-text);">Narrow</div></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><div style="font:700 13px var(--font-heading);color:var(--color-accent-700);width:20px;">04</div><div style="font:500 13px var(--font-body);color:var(--color-text);">Rank</div></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><div style="font:700 13px var(--font-heading);color:var(--color-accent-700);width:20px;">05</div><div style="font:500 13px var(--font-body);color:var(--color-text);">Reflect</div></div>
+          <div style="display:flex;gap:12px;align-items:baseline;"><div style="font:700 13px var(--font-heading);color:var(--color-accent-700);width:20px;">06</div><div style="font:500 13px var(--font-body);color:var(--color-text);">Values Statement</div></div>
+        </div>
+        <button onClick="{{ onNext }}" class="btn btn-primary btn-block" style="margin-top:8px;">Get Started</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showLifeReview }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <sc-if value="{{ isLifeArea }}" hint-placeholder-val="{{ true }}">
+          <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">{{ currentAreaLabel }}</div>
+          <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">List a few things you Love, Like, Tolerate or Dislike about this part of the business. Don't overthink it &mdash; go with feeling.</div>
+          <sc-for list="{{ lifeColumns }}" as="col" hint-placeholder-count="4">
+            <div style="border-top:2px solid var(--color-neutral-300);padding:14px 0;">
+              <div style="font:700 11px var(--font-heading);letter-spacing:0.06em;text-transform:uppercase;color:{{ col.color }};margin-bottom:8px;">{{ col.title }}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+                <sc-for list="{{ col.items }}" as="chip" hint-placeholder-count="2">
+                  <span onClick="{{ chip.onRemove }}" class="tag tag-neutral" style="cursor:pointer;">{{ chip.text }} &times;</span>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <input class="input" type="text" placeholder="Add one..." value="{{ col.draft }}" onChange="{{ col.onChange }}" onKeyDown="{{ col.onKeyDown }}" style="flex:1;"></input>
+                <button onClick="{{ col.onAdd }}" class="btn btn-secondary">Add</button>
+              </div>
+            </div>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ isLifeSynthesis }}" hint-placeholder-val="{{ false }}">
+          <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Notice the themes</div>
+          <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">Look back over everything you just listed.</div>
+          <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+            <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">What values and common themes do you notice?</div>
+            <textarea class="input" rows="3" value="{{ themesNote }}" onChange="{{ onThemesChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+          </div>
+          <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+            <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Where you tolerate or dislike something, what value might not be getting met?</div>
+            <textarea class="input" rows="3" value="{{ dislikeNote }}" onChange="{{ onDislikeChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+          </div>
+        </sc-if>
+        <div style="text-align:right;font:500 11px var(--font-body);color:var(--color-neutral-500);">Area {{ lifeAreaDisplayNum }} of 6</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showBrainstorm }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">What matters most?</div>
+        <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">Here are 50 values. Click on anything that vibes with your idea of your business. In the next step, we'll turn that into cards and swipe it down to 3&ndash;7.</div>
+        <div style="border-top:2px solid var(--color-neutral-300);border-bottom:2px solid var(--color-neutral-300);padding:14px 0;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:8px;">Selected ({{ selectedCount }})</div>
+          <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ selectedChips }}" as="chip" hint-placeholder-count="4">
+                <span onClick="{{ chip.onRemove }}" class="tag tag-accent" style="cursor:pointer;">{{ chip.label }} &times;</span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noSelection }}" hint-placeholder-val="{{ false }}">
+            <div style="font:400 13px var(--font-body);color:var(--color-neutral-500);">Nothing selected yet.</div>
+          </sc-if>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <input class="input" type="text" placeholder="Write your own value..." value="{{ customDraft }}" onChange="{{ onCustomChange }}" onKeyDown="{{ onCustomKeyDown }}" style="flex:1;"></input>
+          <button onClick="{{ onCustomAdd }}" class="btn btn-secondary">Add</button>
+        </div>
+        <div style="font:600 12px var(--font-body);color:var(--color-text);margin-top:4px;">Or pick from this list</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <sc-for list="{{ curatedChips }}" as="chip" hint-placeholder-count="12">
+            <span onClick="{{ chip.onToggle }}" class="{{ chip.className }}" style="cursor:pointer;">{{ chip.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showNarrow }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:14px;height:100%;">
+        <sc-if value="{{ showNarrowIntro }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:20px;align-items:center;text-align:center;padding-top:12px;">
+            <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">The Values Round</div>
+            <div style="font:400 14px/1.6 var(--font-body);color:var(--color-neutral-700);max-width:280px;">Here are great business values, you start with {{ deckSize }}. Your target is 3&ndash;7. If you vibe with it, swipe right. If not, swipe left.</div>
+            <div style="display:flex;align-items:center;gap:16px;width:100%;justify-content:center;">
+              <div style="font:700 12px var(--font-heading);color:var(--color-neutral-600);width:52px;text-align:right;">&larr; Pass</div>
+              <div style="width:80px;display:flex;justify-content:center;">
+                <div class="narrow-demo-card" style="width:70px;height:70px;background:var(--color-bg);border:2px solid var(--color-text);"></div>
+              </div>
+              <div style="font:700 12px var(--font-heading);color:var(--color-accent);width:52px;text-align:left;">Vibe &rarr;</div>
+            </div>
+            <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);max-width:280px;">Remember, the challenge is to get rid of them and get to the core of your business values. Everything you keep moves to the next round &mdash; rounds repeat until you're at 3&ndash;7. (You can add your own later if you don't see them.)</div>
+            <button onClick="{{ onStartNarrowRound }}" class="btn btn-primary btn-block">Start Swiping</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ narrowMainVisible }}" hint-placeholder-val="{{ false }}">
+          <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Round {{ round }}</div>
+          <sc-if value="{{ swipeActive }}" hint-placeholder-val="{{ true }}">
+            <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">Swipe right if you vibe with it, left if you don't.</div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font:600 11px var(--font-body);color:var(--color-neutral-500);margin-bottom:4px;"><span>{{ keptCount }} kept so far</span><span>{{ roundPositionLabel }}</span></div>
+              <div style="height:2px;background:var(--color-neutral-300);"><div style="height:2px;background:var(--color-accent);width:{{ roundProgressPct }}%;"></div></div>
+            </div>
+            <div style="position:relative;width:100%;height:370px;margin:4px 0 4px;">
+              <sc-for list="{{ stackCards }}" as="card" hint-placeholder-count="3">
+                <div onPointerDown="{{ card.onDown }}" onPointerMove="{{ card.onMove }}" onPointerUp="{{ card.onUp }}" onPointerLeave="{{ card.onUp }}" style="position:absolute;inset:0;background:var(--color-bg);border:2px solid var(--color-text);display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;transform:{{ card.transform }};z-index:{{ card.z }};transition:{{ card.transition }};opacity:{{ card.opacity }};touch-action:none;user-select:none;">
+                  <div style="font:700 28px/1.15 var(--font-heading);text-align:center;color:var(--color-text);">{{ card.label }}</div>
+                  <sc-if value="{{ card.isFront }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;top:16px;left:16px;font:700 13px var(--font-heading);color:var(--color-accent);opacity:{{ card.keepOpacity }};border:2px solid var(--color-accent);padding:4px 10px;transform:rotate(-8deg);">VIBE</div>
+                  </sc-if>
+                  <sc-if value="{{ card.isFront }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;top:16px;right:16px;font:700 13px var(--font-heading);color:var(--color-neutral-600);opacity:{{ card.discardOpacity }};border:2px solid var(--color-neutral-600);padding:4px 10px;transform:rotate(8deg);">PASS</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <button onClick="{{ onDiscard }}" class="btn btn-secondary btn-block">&#10005; Pass</button>
+              <button onClick="{{ onKeep }}" class="btn btn-primary btn-block">&#10003; Vibe</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ swipeRoundDone }}" hint-placeholder-val="{{ false }}">
+            <div style="font:400 14px/1.6 var(--font-body);color:var(--color-neutral-700);">Down to {{ keptCount }} values. {{ passMessage }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ keptChipsDisplay }}" as="chip" hint-placeholder-count="6">
+                <span class="tag tag-accent">{{ chip.label }}</span>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showRank }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Rank your values</div>
+        <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">Use the arrows to reorder, most important first. The line marks your final cut.</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);white-space:nowrap;">Keep top {{ topCount }}</div>
+          <input type="range" min="3" max="10" value="{{ topCount }}" onChange="{{ onTopCountChange }}" style="flex:1;"></input>
+        </div>
+        <sc-for list="{{ rankItems }}" as="item" hint-placeholder-count="8">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:{{ item.borderStyle }};opacity:{{ item.opacity }};background:{{ item.bg }};">
+            <div style="font:700 16px var(--font-heading);color:{{ item.numColor }};width:24px;">{{ item.num }}</div>
+            <div style="font:600 14px var(--font-body);color:var(--color-text);flex:1;">{{ item.label }}</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <button onClick="{{ item.onUp }}" class="btn btn-secondary btn-icon" disabled="{{ item.isFirst }}" style="width:32px;height:26px;padding:0;">&#8593;</button>
+              <button onClick="{{ item.onDown }}" class="btn btn-secondary btn-icon" disabled="{{ item.isLast }}" style="width:32px;height:26px;padding:0;">&#8595;</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showReflection }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Review &amp; wrap-up</div>
+        <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">A few final questions to turn this into action.</div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">1. What did you learn about yourself or your business while doing this exercise?</div>
+          <textarea class="input" rows="2" value="{{ reflLearned }}" onChange="{{ onReflLearned }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">2. Did anything surprise you?</div>
+          <textarea class="input" rows="2" value="{{ reflSurprises }}" onChange="{{ onReflSurprises }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:8px;">3. What could you...</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <input class="input" type="text" placeholder="Stop doing" value="{{ reflStop }}" onChange="{{ onReflStop }}"></input>
+            <input class="input" type="text" placeholder="Do less of" value="{{ reflLess }}" onChange="{{ onReflLess }}"></input>
+            <input class="input" type="text" placeholder="Do more of" value="{{ reflMore }}" onChange="{{ onReflMore }}"></input>
+            <input class="input" type="text" placeholder="Continue doing" value="{{ reflContinue }}" onChange="{{ onReflContinue }}"></input>
+            <input class="input" type="text" placeholder="Start doing" value="{{ reflStart }}" onChange="{{ onReflStart }}"></input>
+          </div>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">4. What is essential for this business — the thing it can never compromise on?</div>
+          <textarea class="input" rows="2" value="{{ reflEssential }}" onChange="{{ onReflEssential }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">5. What must this business avoid — the thing that would break trust or go against its values?</div>
+          <textarea class="input" rows="2" value="{{ reflAvoid }}" onChange="{{ onReflAvoid }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">6. In 3 years, fully aligned with these values, what does success look like?</div>
+          <textarea class="input" rows="3" value="{{ reflThreeYear }}" onChange="{{ onReflThreeYear }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">7. Make a promise to yourself: what's one action you can take based on what you learned about yourself and your business, and when are you going to do it by?</div>
+          <div style="display:flex;gap:8px;">
+            <input class="input" type="text" placeholder="Action" value="{{ reflAction }}" onChange="{{ onReflAction }}" style="flex:2;"></input>
+            <input class="input" type="text" placeholder="By when" value="{{ reflByWhen }}" onChange="{{ onReflByWhen }}" style="flex:1;"></input>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showStatement }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;" id="statement-capture">
+        <div style="height:2px;background:var(--color-accent);width:56px;"></div>
+        <input class="input" type="text" placeholder="Your business name" value="{{ businessName }}" onChange="{{ onBusinessNameChange }}" style="font:700 20px var(--font-heading);border:none;border-bottom:2px solid var(--color-neutral-300);padding:4px 0;background:none;"></input>
+        <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);">Business Values Statement</div>
+        <div style="border-top:2px solid var(--color-text);"></div>
+
+        <sc-if value="{{ isGeneratingStatement }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 0;text-align:center;">
+            <div style="width:32px;height:32px;border:2px solid var(--color-neutral-300);border-top:2px solid var(--color-accent);border-radius:50%;animation:om-spin 0.9s linear infinite;"></div>
+            <div style="font:400 13px var(--font-body);color:var(--color-neutral-600);">Writing your mission statement and value descriptions...</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasGenerateError }}" hint-placeholder-val="{{ false }}">
+          <div style="font:400 12px var(--font-body);color:var(--color-accent-700);">{{ generateError }}</div>
+          <button onClick="{{ onGenerateStatement }}" class="btn btn-secondary">Try Again</button>
+        </sc-if>
+        <sc-if value="{{ hasMissionStatement }}" hint-placeholder-val="{{ false }}">
+          <div style="font:400 15px/1.65 var(--font-body);color:var(--color-text);">{{ missionStatement }}</div>
+        </sc-if>
+        <sc-if value="{{ needsGenerateButton }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ onGenerateStatement }}" class="btn btn-secondary">Write My Statement</button>
+        </sc-if>
+
+        <sc-for list="{{ statementValues }}" as="v" hint-placeholder-count="7">
+          <div style="display:flex;gap:12px;padding:12px 0;border-bottom:2px solid var(--color-neutral-300);">
+            <div style="font:700 18px var(--font-heading);color:var(--color-accent);width:24px;">{{ v.num }}</div>
+            <div style="flex:1;">
+              <div style="font:700 15px var(--font-heading);color:var(--color-text);">{{ v.label }}</div>
+              <div style="font:400 13px/1.55 var(--font-body);color:var(--color-neutral-700);margin-top:4px;">{{ v.note }}</div>
+            </div>
+          </div>
+        </sc-for>
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-neutral-700);">What's essential</div>
+          <div style="font:400 13px/1.5 var(--font-body);color:var(--color-text);">{{ reflEssentialDisplay }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-neutral-700);">What to avoid</div>
+          <div style="font:400 13px/1.5 var(--font-body);color:var(--color-text);">{{ reflAvoidDisplay }}</div>
+        </div>
+        <div style="background:var(--color-accent);padding:16px;display:flex;flex-direction:column;gap:4px;">
+          <div style="font:600 10px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:#fff;opacity:0.85;">My promise to myself</div>
+          <div style="font:700 15px var(--font-heading);color:#fff;">{{ reflActionDisplay }}</div>
+          <div style="font:400 12px var(--font-body);color:#fff;opacity:0.85;">by {{ reflByWhenDisplay }}</div>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);">Save this statement</div>
+          <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-600);">Take a screenshot to keep it, or enter your email and we'll send you a copy.</div>
+          <sc-if value="{{ emailSent }}" hint-placeholder-val="{{ false }}">
+            <div style="font:600 13px var(--font-body);color:var(--color-accent-700);">Sent to {{ emailValue }}.</div>
+          </sc-if>
+          <sc-if value="{{ emailSent }}" hint-placeholder-val="{{ true }}" >
+          </sc-if>
+          <div style="display:flex;gap:8px;">
+            <input class="input" type="email" placeholder="you@business.com" value="{{ emailValue }}" onChange="{{ onEmailChange }}" style="flex:1;"></input>
+            <button onClick="{{ onSendEmail }}" class="btn btn-secondary" disabled="{{ emailSendDisabled }}">Email Me</button>
+          </div>
+        </div>
+
+        <button onClick="{{ onGoToPerfectClient }}" class="btn btn-primary btn-block">Next: Define Your Perfect Client</button>
+        <button onClick="{{ onPrint }}" class="btn btn-secondary btn-block">Print / Export</button>
+        <button onClick="{{ resetAll }}" class="btn btn-ghost btn-block">Start Over</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showPerfectClient }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Define your perfect client</div>
+        <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">Pick the option that fits best, or write your own.</div>
+        <sc-for list="{{ pcPersonaBlocks }}" as="persona" hint-placeholder-count="1">
+          <div style="border-top:2px solid var(--color-text);padding-top:14px;">
+            <div style="font:700 13px var(--font-heading);letter-spacing:0.04em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:10px;">{{ persona.heading }}</div>
+            <div style="margin-bottom:14px;">
+              <div style="font:600 13px var(--font-body);color:var(--color-text);margin-bottom:10px;">Give them a name</div>
+              <input class="input" type="text" placeholder="e.g. Sarah" value="{{ persona.name }}" onChange="{{ persona.onNameChange }}" style="width:100%;box-sizing:border-box;"></input>
+            </div>
+            <sc-for list="{{ persona.questions }}" as="q" hint-placeholder-count="7">
+              <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;margin-bottom:14px;">
+                <div style="font:600 13px var(--font-body);color:var(--color-text);margin-bottom:10px;">{{ q.text }}</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <sc-for list="{{ q.options }}" as="opt" hint-placeholder-count="3">
+                    <div onClick="{{ opt.onSelect }}" class="{{ opt.className }}" style="padding:10px 12px;font:400 13px var(--font-body);cursor:pointer;">{{ opt.label }}</div>
+                  </sc-for>
+                  <div onClick="{{ q.onSelectOther }}" class="{{ q.otherClassName }}" style="padding:10px 12px;font:400 13px var(--font-body);cursor:pointer;">Other</div>
+                  <sc-if value="{{ q.showOtherInput }}" hint-placeholder-val="{{ false }}">
+                    <input class="input" type="text" placeholder="Write your own..." value="{{ q.otherValue }}" onChange="{{ q.onOtherChange }}" style="width:100%;box-sizing:border-box;"></input>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ persona.showRemove }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ onRemoveSecondPersona }}" class="btn btn-ghost">Remove this dream client</button>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ showAddSecondPersona }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ onAddSecondPersona }}" class="btn btn-secondary btn-block">+ Add a second dream client (different niche)</button>
+        </sc-if>
+        <div style="display:flex;gap:10px;padding-top:4px;">
+          <button onClick="{{ onBackFromPc }}" class="btn btn-secondary">Back</button>
+          <button onClick="{{ onContinueFromPc }}" class="btn btn-primary btn-block" disabled="{{ pcContinueDisabled }}">Continue</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showWrapup }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="height:2px;background:var(--color-accent);width:56px;"></div>
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">You're all set for now</div>
+        <div style="font:400 14px/1.6 var(--font-body);color:var(--color-neutral-700);">You've defined your business values and your perfect client. Next: the granular details your team or AI needs to answer questions, then a guided brand voice interview.</div>
+        <button onClick="{{ onGoToBizDetails }}" class="btn btn-primary btn-block">Add Business Details</button>
+        <div style="display:flex;gap:10px;">
+          <button onClick="{{ onBackFromPc }}" class="btn btn-secondary">Back</button>
+          <button onClick="{{ resetAll }}" class="btn btn-ghost btn-block">Start Over</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showBizDetails }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Business details</div>
+        <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">The granular stuff &mdash; hours, areas served, policies, FAQs. This is what lets your team or an AI answer real questions accurately.</div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Tagline</div>
+          <input class="input" type="text" placeholder="A short line describing what you do" value="{{ biz.tagline }}" onChange="{{ onBizTaglineChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">What do you do, in plain terms?</div>
+          <textarea class="input" rows="2" value="{{ biz.whatYouDo }}" onChange="{{ onBizWhatYouDoChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Hours of operation</div>
+          <input class="input" type="text" placeholder="e.g. Mon–Fri 9am–5pm" value="{{ biz.hoursText }}" onChange="{{ onBizHoursTextChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Days off / holidays / blackout dates</div>
+          <input class="input" type="text" placeholder="e.g. Weekends, major holidays" value="{{ biz.daysOff }}" onChange="{{ onBizDaysOffChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Where are you located?</div>
+          <input class="input" type="text" placeholder="City, region, or address" value="{{ biz.location }}" onChange="{{ onBizLocationChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Areas served</div>
+          <input class="input" type="text" placeholder="e.g. Greater Boston, or nationwide" value="{{ biz.areasServed }}" onChange="{{ onBizAreasServedChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:10px;">Do you work in-person, remote, or both?</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <sc-for list="{{ reachOptions }}" as="opt" hint-placeholder-count="3">
+              <div onClick="{{ opt.onSelect }}" class="{{ opt.className }}" style="padding:10px 12px;font:400 13px var(--font-body);cursor:pointer;">{{ opt.label }}</div>
+            </sc-for>
+            <div onClick="{{ onSelectReachOther }}" class="{{ reachOtherClassName }}" style="padding:10px 12px;font:400 13px var(--font-body);cursor:pointer;">Other</div>
+            <sc-if value="{{ reachOtherActive }}" hint-placeholder-val="{{ false }}">
+              <input class="input" type="text" placeholder="Describe it..." value="{{ biz.reachOther }}" onChange="{{ onReachOtherChange }}" style="width:100%;box-sizing:border-box;"></input>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Phone</div>
+          <input class="input" type="text" value="{{ biz.phone }}" onChange="{{ onBizPhoneChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Email</div>
+          <input class="input" type="text" value="{{ biz.email }}" onChange="{{ onBizEmailChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Website</div>
+          <input class="input" type="text" value="{{ biz.website }}" onChange="{{ onBizWebsiteChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Booking / scheduling link</div>
+          <input class="input" type="text" value="{{ biz.bookingLink }}" onChange="{{ onBizBookingLinkChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Payment methods accepted</div>
+          <input class="input" type="text" placeholder="e.g. Card, cash, invoice, Venmo" value="{{ biz.paymentMethods }}" onChange="{{ onBizPaymentMethodsChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Pricing model</div>
+          <input class="input" type="text" placeholder="e.g. Hourly, flat-fee, subscription" value="{{ biz.pricingModel }}" onChange="{{ onBizPricingModelChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Price range</div>
+          <input class="input" type="text" placeholder="e.g. $150–$400 per project" value="{{ biz.priceRange }}" onChange="{{ onBizPriceRangeChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Cancellation / refund policy</div>
+          <textarea class="input" rows="2" value="{{ biz.cancellationPolicy }}" onChange="{{ onBizCancellationPolicyChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Guarantee / warranty</div>
+          <textarea class="input" rows="2" value="{{ biz.guarantee }}" onChange="{{ onBizGuaranteeChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Team size</div>
+          <input class="input" type="text" placeholder="e.g. Just me, or 12 employees" value="{{ biz.teamSize }}" onChange="{{ onBizTeamSizeChange }}" style="width:100%;box-sizing:border-box;"></input>
+        </div>
+        <div>
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:6px;">Anything else we should know?</div>
+          <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-600);margin-bottom:6px;">Deposit requirements, artwork/proof policies, rescheduling rules, licensing, insurance, anything else that comes up but doesn't fit above.</div>
+          <textarea class="input" rows="3" value="{{ biz.otherPolicies }}" onChange="{{ onBizOtherPoliciesChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);margin-bottom:10px;">Frequently asked questions</div>
+          <sc-for list="{{ faqBlocks }}" as="f" hint-placeholder-count="1">
+            <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--color-neutral-300);">
+              <input class="input" type="text" placeholder="Question" value="{{ f.q }}" onChange="{{ f.onQChange }}" style="width:100%;box-sizing:border-box;margin-bottom:6px;"></input>
+              <textarea class="input" rows="2" placeholder="Answer" value="{{ f.a }}" onChange="{{ f.onAChange }}" style="width:100%;box-sizing:border-box;resize:vertical;"></textarea>
+              <sc-if value="{{ f.showRemove }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ f.onRemove }}" class="btn btn-ghost" style="margin-top:6px;">Remove</button>
+              </sc-if>
+            </div>
+          </sc-for>
+          <button onClick="{{ onAddFaq }}" class="btn btn-secondary btn-block">+ Add another FAQ</button>
+        </div>
+
+        <button onClick="{{ onContinueFromBizDetails }}" class="btn btn-primary btn-block">Continue to Brand Voice Interview</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showInterview }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;height:100%;min-height:520px;">
+        <div style="font:700 20px/1.2 var(--font-heading);color:var(--color-text);margin-bottom:4px;">Brand Voice Interview</div>
+        <div style="font:400 12px var(--font-body);color:var(--color-neutral-600);margin-bottom:14px;">Question {{ chatDisplayIndex }} of {{ chatTotal }}</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:12px;">
+          <sc-for list="{{ chatMessages }}" as="msg" hint-placeholder-count="2">
+            <div style="align-self:{{ msg.align }};max-width:85%;background:{{ msg.bg }};color:{{ msg.color }};padding:10px 14px;font:400 13px/1.5 var(--font-body);">{{ msg.text }}</div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ isGeneratingGuide }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px 0;text-align:center;">
+            <div style="width:32px;height:32px;border:2px solid var(--color-neutral-300);border-top:2px solid var(--color-accent);border-radius:50%;animation:om-spin 0.9s linear infinite;"></div>
+            <div style="font:400 13px var(--font-body);color:var(--color-neutral-600);">Writing your brand guide from everything you've shared...</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasGuideError }}" hint-placeholder-val="{{ false }}">
+          <div style="font:400 12px var(--font-body);color:var(--color-accent-700);">{{ guideError }}</div>
+          <button onClick="{{ onRetryGuide }}" class="btn btn-secondary">Try Again</button>
+        </sc-if>
+        <sc-if value="{{ interviewInProgress }}" hint-placeholder-val="{{ true }}">
+          <div style="border-top:2px solid var(--color-neutral-300);margin-top:14px;padding-top:16px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+            <sc-if value="{{ hasMic }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ onMicToggle }}" class="btn btn-icon" style="width:64px;height:64px;border-radius:50%;{{ micButtonStyle }}">{{ micIcon }}</button>
+              <div style="font:600 12px var(--font-body);color:var(--color-neutral-600);">{{ micStatusText }}</div>
+            </sc-if>
+            <sc-if value="{{ chatDraftHasText }}" hint-placeholder-val="{{ false }}">
+              <div style="width:100%;background:var(--color-neutral-200);padding:10px 12px;font:400 13px/1.5 var(--font-body);color:var(--color-text);">{{ chatDraft }}</div>
+            </sc-if>
+            <div style="display:flex;gap:8px;width:100%;">
+              <button onClick="{{ onToggleTypeInstead }}" class="btn btn-secondary btn-block">{{ typeToggleLabel }}</button>
+              <button onClick="{{ onSendAnswer }}" class="btn btn-primary btn-block" disabled="{{ sendDisabled }}">Send</button>
+            </div>
+            <sc-if value="{{ showTypeInput }}" hint-placeholder-val="{{ false }}">
+              <textarea class="input" rows="2" placeholder="Type your answer..." value="{{ chatDraft }}" onChange="{{ onChatDraftChange }}" onKeyDown="{{ onChatKeyDown }}" style="width:100%;box-sizing:border-box;resize:none;"></textarea>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showVisual }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">Fonts, colors &amp; logo</div>
+        <div style="font:400 13px/1.5 var(--font-body);color:var(--color-neutral-700);">Pick the direction that fits, or keep exploring &mdash; you can regenerate the logo idea below.</div>
+
+        <sc-if value="{{ isGeneratingVisual }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 0;text-align:center;">
+            <div style="width:32px;height:32px;border:2px solid var(--color-neutral-300);border-top:2px solid var(--color-accent);border-radius:50%;animation:om-spin 0.9s linear infinite;"></div>
+            <div style="font:400 13px var(--font-body);color:var(--color-neutral-600);">Suggesting palettes and font pairings...</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasVisualError }}" hint-placeholder-val="{{ false }}">
+          <div style="font:400 12px var(--font-body);color:var(--color-accent-700);">{{ visualError }}</div>
+          <button onClick="{{ onRetryVisual }}" class="btn btn-secondary">Try Again</button>
+        </sc-if>
+
+        <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);">Colors</div>
+        <sc-for list="{{ visualPalettes }}" as="pal" hint-placeholder-count="3">
+          <div onClick="{{ pal.onChoose }}" style="{{ pal.cardStyle }}padding:12px;cursor:pointer;display:flex;gap:8px;">
+            <sc-for list="{{ pal.colors }}" as="c" hint-placeholder-count="4">
+              <div style="flex:1;">
+                <div style="width:100%;height:44px;background:{{ c.hex }};"></div>
+                <div style="font:600 10px var(--font-body);color:var(--color-text);margin-top:4px;">{{ c.name }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+
+        <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-top:6px;">Fonts</div>
+        <sc-for list="{{ visualFontPairings }}" as="f" hint-placeholder-count="3">
+          <div onClick="{{ f.onChoose }}" style="{{ f.cardStyle }}padding:12px;cursor:pointer;">
+            <div style="font-size:19px;font-weight:700;color:var(--color-text);{{ f.headingFontStyle }}">{{ f.heading }}</div>
+            <div style="font-size:14px;color:var(--color-neutral-700);{{ f.bodyFontStyle }}">{{ f.body }} — The quick brown fox jumps over the lazy dog.</div>
+            <div style="font:400 11px/1.4 var(--font-body);color:var(--color-neutral-500);margin-top:4px;">{{ f.rationale }}</div>
+          </div>
+        </sc-for>
+
+        <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-top:6px;">Logo concept</div>
+        <div style="border:2px solid var(--color-neutral-300);padding:12px;font:400 13px/1.55 var(--font-body);color:var(--color-text);">{{ visualLogoConcept }}</div>
+        <button onClick="{{ onRegenerateLogo }}" class="btn btn-secondary" disabled="{{ regeneratingLogo }}">Regenerate logo idea</button>
+
+        <button onClick="{{ onContinueFromVisual }}" class="btn btn-primary btn-block" style="margin-top:8px;">Continue to Brand Guide</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showGuide }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="height:2px;background:var(--color-accent);width:56px;"></div>
+        <div style="font:700 22px/1.2 var(--font-heading);color:var(--color-text);">{{ businessName }} Brand Guide</div>
+        <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;">
+          <span onClick="{{ scrollToValues }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Values</span>
+          <span onClick="{{ scrollToClient }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Client</span>
+          <span onClick="{{ scrollToDetails }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Details</span>
+          <span onClick="{{ scrollToVoice }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Voice</span>
+          <span onClick="{{ scrollToMessaging }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Messaging</span>
+          <span onClick="{{ scrollToVisual }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Visual</span>
+          <span onClick="{{ scrollToDoDont }}" class="tag tag-outline" style="cursor:pointer;white-space:nowrap;">Do/Don't</span>
+        </div>
+
+        <div id="sec-values" style="border-top:2px solid var(--color-text);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Core Values</div>
+          <div style="font:400 14px/1.6 var(--font-body);color:var(--color-text);margin-bottom:10px;">{{ missionStatement }}</div>
+          <sc-for list="{{ statementValues }}" as="v" hint-placeholder-count="5">
+            <div style="padding:8px 0;border-bottom:2px solid var(--color-neutral-300);">
+              <div style="font:700 14px var(--font-heading);color:var(--color-text);">{{ v.num }}. {{ v.label }}</div>
+              <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-700);">{{ v.note }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div id="sec-client" style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Perfect Client</div>
+          <sc-for list="{{ guidePersonas }}" as="p" hint-placeholder-count="1">
+            <div style="font:700 13px var(--font-body);color:var(--color-text);margin-bottom:2px;">{{ p.name }}</div>
+          </sc-for>
+        </div>
+
+        <div id="sec-details" style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Business Details</div>
+          <div style="font:400 13px/1.7 var(--font-body);color:var(--color-text);">
+            <div><b>Hours:</b> {{ biz.hoursText }}</div>
+            <div><b>Days off:</b> {{ biz.daysOff }}</div>
+            <div><b>Location:</b> {{ biz.location }}</div>
+            <div><b>Areas served:</b> {{ biz.areasServed }}</div>
+            <div><b>Contact:</b> {{ biz.phone }} {{ biz.email }} {{ biz.website }}</div>
+            <div><b>Payment:</b> {{ biz.paymentMethods }}</div>
+            <div><b>Pricing:</b> {{ biz.pricingModel }}, {{ biz.priceRange }}</div>
+            <div><b>Cancellation policy:</b> {{ biz.cancellationPolicy }}</div>
+            <div><b>Guarantee:</b> {{ biz.guarantee }}</div>
+            <div><b>Team size:</b> {{ biz.teamSize }}</div>
+            <div><b>Other policies:</b> {{ biz.otherPolicies }}</div>
+          </div>
+          <div style="font:600 11px var(--font-body);color:var(--color-neutral-600);margin-top:10px;margin-bottom:6px;">FAQs</div>
+          <sc-for list="{{ guideFaqs }}" as="f" hint-placeholder-count="2">
+            <div style="padding:6px 0;border-bottom:2px solid var(--color-neutral-300);">
+              <div style="font:700 12px var(--font-body);color:var(--color-text);">{{ f.q }}</div>
+              <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-700);">{{ f.a }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div id="sec-voice" style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Brand Voice</div>
+          <div style="font:400 13px/1.6 var(--font-body);color:var(--color-text);margin-bottom:10px;">{{ guide.toneSummary }}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:140px;">
+              <div style="font:600 11px var(--font-body);color:var(--color-neutral-600);margin-bottom:6px;">Use</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ guideVocabUse }}" as="w" hint-placeholder-count="4">
+                  <span class="tag tag-accent">{{ w }}</span>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;min-width:140px;">
+              <div style="font:600 11px var(--font-body);color:var(--color-neutral-600);margin-bottom:6px;">Avoid</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <sc-for list="{{ guideVocabAvoid }}" as="w" hint-placeholder-count="3">
+                  <span class="tag tag-neutral">{{ w }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-messaging" style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Messaging</div>
+          <sc-for list="{{ guidePillars }}" as="pillar" hint-placeholder-count="3">
+            <div style="padding:8px 0;border-bottom:2px solid var(--color-neutral-300);">
+              <div style="font:700 13px var(--font-heading);color:var(--color-text);">{{ pillar.title }}</div>
+              <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-700);">{{ pillar.desc }}</div>
+            </div>
+          </sc-for>
+          <div style="margin-top:10px;">
+            <div style="font:600 11px var(--font-body);color:var(--color-neutral-600);margin-bottom:4px;">Differentiation</div>
+            <div style="font:400 13px/1.5 var(--font-body);color:var(--color-text);">{{ guide.differentiation }}</div>
+          </div>
+          <div style="margin-top:10px;">
+            <div style="font:600 11px var(--font-body);color:var(--color-neutral-600);margin-bottom:4px;">Origin Story</div>
+            <div style="font:400 13px/1.5 var(--font-body);color:var(--color-text);">{{ guide.originStory }}</div>
+          </div>
+        </div>
+
+        <div id="sec-visual" style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Visual Identity (suggested)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <sc-for list="{{ guideColors }}" as="c" hint-placeholder-count="5">
+              <div style="width:64px;">
+                <div style="width:64px;height:64px;background:{{ c.hex }};border:2px solid var(--color-text);"></div>
+                <div style="font:600 10px var(--font-body);color:var(--color-text);margin-top:4px;">{{ c.name }}</div>
+                <div style="font:400 10px var(--font-body);color:var(--color-neutral-600);">{{ c.hex }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font:400 13px/1.6 var(--font-body);color:var(--color-text);"><b>{{ guide.visual.headingFont }}</b> + {{ guide.visual.bodyFont }}</div>
+          <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-700);margin-bottom:10px;">{{ guide.visual.fontRationale }}</div>
+          <div style="font:600 11px var(--font-body);color:var(--color-neutral-600);margin-bottom:4px;">Logo concept</div>
+          <div style="font:400 13px/1.5 var(--font-body);color:var(--color-text);">{{ guide.visual.logoConcept }}</div>
+        </div>
+
+        <div id="sec-dodont" style="border-top:2px solid var(--color-neutral-300);padding-top:14px;">
+          <div style="font:600 11px var(--font-body);letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px;">Do's &amp; Don'ts</div>
+          <sc-for list="{{ guideDoDont }}" as="item" hint-placeholder-count="3">
+            <div style="padding:8px 0;border-bottom:2px solid var(--color-neutral-300);">
+              <div style="font:400 12px/1.5 var(--font-body);color:var(--color-accent-700);">✓ {{ item.do }}</div>
+              <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-500);">✗ {{ item.dont }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="border-top:2px solid var(--color-neutral-300);padding-top:16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font:600 12px var(--font-body);color:var(--color-text);">Save this guide</div>
+          <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-600);">Take a screenshot to keep it, or enter your email and we'll send you a copy.</div>
+          <sc-if value="{{ emailSent }}" hint-placeholder-val="{{ false }}">
+            <div style="font:600 13px var(--font-body);color:var(--color-accent-700);">Sent to {{ emailValue }}.</div>
+          </sc-if>
+          <div style="display:flex;gap:8px;">
+            <input class="input" type="email" placeholder="you@business.com" value="{{ emailValue }}" onChange="{{ onEmailChange }}" style="flex:1;"></input>
+            <button onClick="{{ onSendEmail }}" class="btn btn-secondary" disabled="{{ emailSendDisabled }}">Email Me</button>
+          </div>
+        </div>
+        <button onClick="{{ onPrint }}" class="btn btn-primary btn-block">Print / Export</button>
+        <button onClick="{{ onExportJson }}" class="btn btn-secondary btn-block">Download JSON (for agent/staff training)</button>
+        <div class="field" style="margin-top:4px;">
+          <label>GoHighLevel webhook URL</label>
+          <input class="input" type="text" placeholder="https://services.leadconnectorhq.com/hooks/..." value="{{ ghlWebhookUrl }}" onChange="{{ onGhlWebhookUrlChange }}"></input>
+        </div>
+        <div style="font:400 12px/1.5 var(--font-body);color:var(--color-neutral-700);">Creates/updates this contact in GHL and hands the full brand guide to a workflow so it can send the guide to the client automatically.</div>
+        <button onClick="{{ onSendToGhl }}" class="btn btn-secondary btn-block" disabled="{{ sendingToGhl }}">{{ ghlSendLabel }}</button>
+        <button onClick="{{ resetAll }}" class="btn btn-ghost btn-block">Start Over</button>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <sc-if value="{{ showFooter }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:14px 20px 20px;border-top:2px solid var(--color-neutral-300);display:flex;gap:10px;">
+      <sc-if value="{{ showBackBtn }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onBack }}" class="btn btn-secondary">Back</button>
+      </sc-if>
+      <button onClick="{{ onNext }}" class="btn btn-primary btn-block" disabled="{{ nextDisabled }}">{{ nextLabel }}</button>
+    </div>
+  </sc-if>
+
+  <div style="padding:14px 20px;border-top:2px solid var(--color-neutral-300);display:flex;align-items:center;justify-content:center;gap:6px;">
+    <a href="https://lbkh.solutions" target="_blank" rel="noopener" style="font:600 11px var(--font-body);color:var(--color-neutral-700);text-decoration:none;">LBKH Solutions. Already working for you.</a>
+  </div>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CURATED = [
+  ['Accountability','Owning outcomes, good or bad.'],
+  ['Achievement','Setting and hitting real goals.'],
+  ['Adaptability','Adjusting quickly as conditions change.'],
+  ['Adventure','Seeking out new challenges and experiences.'],
+  ['Altruism','Putting others\' good ahead of self-interest.'],
+  ['Ambition','Pushing for bigger goals.'],
+  ['Authenticity','Being genuinely yourself, not a performance.'],
+  ['Balance','Keeping work and life in proportion.'],
+  ['Beauty','Caring about craft, form and aesthetics.'],
+  ['Being the best','Aiming to lead the field.'],
+  ['Belonging','Making sure people feel they fit in.'],
+  ['Career','Investing in long-term professional growth.'],
+  ['Caring','Genuinely looking out for others.'],
+  ['Collaboration','Working together across teams.'],
+  ['Commitment','Following through on what you start.'],
+  ['Community','Investing in the people around the business.'],
+  ['Compassion','Responding to others\' struggles with empathy.'],
+  ['Competence','Being genuinely skilled at the work.'],
+  ['Confidence','Acting with conviction in your ability.'],
+  ['Connection','Building real relationships, not just transactions.'],
+  ['Contentment','Finding satisfaction in what you have.'],
+  ['Contribution','Adding something of real value.'],
+  ['Cooperation','Choosing to work with, not against.'],
+  ['Courage','Doing the hard right thing.'],
+  ['Creativity','Generating original ideas and solutions.'],
+  ['Curiosity','Staying genuinely interested in how and why.'],
+  ['Dignity','Treating everyone as worthy of respect.'],
+  ['Diversity','Valuing different backgrounds and perspectives.'],
+  ['Environment','Protecting the natural world you operate in.'],
+  ['Efficiency','Getting more from less.'],
+  ['Equality','Giving everyone the same standing and chance.'],
+  ['Ethics','Doing what\'s right, not just what\'s legal.'],
+  ['Excellence','Refusing to settle for good enough.'],
+  ['Fairness','Treating people equitably.'],
+  ['Faith','Trusting in something larger than yourself.'],
+  ['Family','Honoring the people closest to you.'],
+  ['Financial stability','Building a business that can weather hard times.'],
+  ['Forgiveness','Letting go of grudges and mistakes.'],
+  ['Freedom','Preserving room to choose and act.'],
+  ['Friendship','Valuing warm, loyal relationships.'],
+  ['Fun','Making the work genuinely enjoyable.'],
+  ['Future generations','Building with tomorrow in mind, not just today.'],
+  ['Generosity','Giving freely of time, money or effort.'],
+  ['Giving back','Returning value to the community you draw from.'],
+  ['Grace','Extending patience and goodwill, especially when hard.'],
+  ['Gratitude','Noticing and naming what you\'re thankful for.'],
+  ['Growth','Expanding capability, reach, or scale.'],
+  ['Harmony','Seeking agreement over conflict.'],
+  ['Health','Protecting physical and mental well-being.'],
+  ['Home','Valuing a sense of place and stability.'],
+  ['Honesty','Telling the truth, even when hard.'],
+  ['Hope','Believing things can and will improve.'],
+  ['Humility','Staying grounded despite success.'],
+  ['Humor','Not taking everything too seriously.'],
+  ['Inclusion','Making sure every voice has a seat.'],
+  ['Independence','Standing on your own judgment and resources.'],
+  ['Initiative','Acting before being told to.'],
+  ['Integrity','Doing right even when no one is watching.'],
+  ['Intuition','Trusting instinct alongside evidence.'],
+  ['Job security','Offering people confidence in their footing.'],
+  ['Joy','Choosing delight, not just duty.'],
+  ['Justice','Making sure outcomes are fair and earned.'],
+  ['Kindness','Choosing warmth in small everyday moments.'],
+  ['Knowledge','Valuing depth of understanding.'],
+  ['Leadership','Setting a direction others can follow.'],
+  ['Learning','Staying curious and improving.'],
+  ['Legacy','Building something that outlasts you.'],
+  ['Leisure','Protecting time to rest and recharge.'],
+  ['Love','Leading with genuine care.'],
+  ['Loyalty','Standing by people and commitments.'],
+  ['Making a difference','Wanting the work to actually matter.'],
+  ['Nature','Respecting and protecting the natural world.'],
+  ['Openness','Being receptive to new ideas and feedback.'],
+  ['Optimism','Expecting good outcomes, even under pressure.'],
+  ['Order','Valuing structure and predictability.'],
+  ['Parenting','Prioritizing the raising of the next generation.'],
+  ['Patience','Staying steady while things take time.'],
+  ['Patriotism','Pride and duty toward one\'s country.'],
+  ['Peace','Preferring calm resolution over conflict.'],
+  ['Perseverance','Pushing through when things get hard.'],
+  ['Personal fulfillment','Wanting work that feels meaningful.'],
+  ['Power','Valuing influence and the ability to shape outcomes.'],
+  ['Pride','Taking real ownership in the work\'s quality.'],
+  ['Recognition','Wanting effort and results to be seen.'],
+  ['Reliability','Being consistent and dependable.'],
+  ['Resourcefulness','Making progress with limited means.'],
+  ['Respect','Valuing people\'s dignity and input.'],
+  ['Responsibility','Owning your role and its consequences.'],
+  ['Risk-taking','Being willing to bet on the unproven.'],
+  ['Safety','Protecting people from harm.'],
+  ['Security','Building stability people can count on.'],
+  ['Self-discipline','Doing what\'s needed, not just what\'s easy.'],
+  ['Self-expression','Making room for individuality to show.'],
+  ['Self-respect','Holding your own standards, regardless of others.'],
+  ['Serenity','Valuing calm over chaos.'],
+  ['Service','Putting others\' needs at the center of the work.'],
+  ['Simplicity','Cutting complexity wherever you can.'],
+  ['Spirituality','Connecting the work to something deeper.'],
+  ['Sportsmanship','Competing fairly and with respect.'],
+  ['Stewardship','Managing resources responsibly for those who come after.'],
+  ['Success','Measuring and pursuing real results.'],
+  ['Teamwork','Winning and losing together.'],
+  ['Thrift','Being careful and deliberate with resources.'],
+  ['Time','Treating time as the scarcest resource.'],
+  ['Tradition','Honoring what\'s been proven over time.'],
+  ['Travel','Valuing exposure to new places and ideas.'],
+  ['Trust','Being someone others can rely on.'],
+  ['Truth','Insisting on accuracy over convenience.'],
+  ['Understanding','Seeking to truly grasp others\' perspective.'],
+  ['Uniqueness','Standing apart rather than blending in.'],
+  ['Usefulness','Making sure the work solves real problems.'],
+  ['Vision','Working toward a clear future.'],
+  ['Vulnerability','Being willing to be seen, uncertainty included.'],
+  ['Wealth','Building real financial resources.'],
+  ['Well-being','Caring for the people who do the work.'],
+  ['Wholeheartedness','Showing up fully, not half-in.'],
+  ['Wisdom','Applying judgment earned through experience.'],
+].map((p,i)=>({id:'v'+i, label:p[0], def:p[1]}));
+
+const LIFE_AREAS = ['Founding this business','Building the team','Serving customers','Day-to-day operations','Growth & strategy decisions'];
+const COL_DEFS = [
+  {key:'love', title:'Love', color:'var(--color-accent-700)'},
+  {key:'like', title:'Like', color:'var(--color-neutral-800)'},
+  {key:'tolerate', title:'Tolerate', color:'var(--color-neutral-600)'},
+  {key:'dislike', title:'Dislike', color:'var(--color-neutral-500)'}
+];
+const STORE_KEY = 'bizValuesApp_v1';
+
+function defaultState(){
+  return {
+    screen: 'intro',
+    contact: {yourName:'', phone:'', email:'', businessName:'', website:'', social:''},
+    lifeSubIdx: 0,
+    lifeData: LIFE_AREAS.map(()=>({love:[],like:[],tolerate:[],dislike:[]})),
+    colDrafts: {love:'',like:'',tolerate:'',dislike:''},
+    themesNote: '', dislikeNote: '',
+    selectedIds: [], customItems: [], customDraft: '',
+    narrowIntroSeen: false,
+    round: 1, swipeQueue: [], swipeIndex: 0, kept: [], discarded: [],
+    swipeDragX: 0, swipeDragging: false, swipeAnimating: false,
+    rankList: [], topCount: 7, dragIndex: null,
+    reflLearned:'', reflSurprises:'', reflStop:'', reflLess:'', reflMore:'', reflContinue:'', reflStart:'',
+    reflEssential:'', reflAvoid:'', reflThreeYear:'', reflAction:'', reflByWhen:'',
+    businessName:'', statementNotes: {}, missionStatement:'', generatingStatement:false, generateError:'',
+    emailValue:'', emailSent:false,
+    pcPersonas: [{name:'', answers:{}, otherValues:{}, otherActive:{}}],
+    interviewIdx: 0, interviewMessages: [], interviewAnswers: {}, interviewDraft: '', micListening: false, showTypeInput: false,
+    guide: null, generatingGuide: false, guideError: '',
+    visualOptions: null, generatingVisual: false, visualError: '', chosenPaletteIdx: 0, chosenFontIdx: 0, regeneratingLogo: false,
+    biz: {tagline:'', whatYouDo:'', hoursText:'', daysOff:'', areasServed:'', location:'', reachType:'', reachOther:'',
+      phone:'', email:'', website:'', bookingLink:'', paymentMethods:'', pricingModel:'', priceRange:'',
+      cancellationPolicy:'', guarantee:'', teamSize:'', otherPolicies:''},
+    faqs: [{q:'', a:''}],
+    ghlWebhookUrl: 'https://services.leadconnectorhq.com/hooks/fkyVaCUPjbDUBzUopuLP/webhook-trigger/fcbe76f7-8a93-4635-acc0-eec6549dff6a',
+    theme: 'light'
+  };
+}
+
+const PC_QUESTIONS = [
+  {id:'age', text:"What's their age range?", options:['Under 25','25–35','35–45','45–55','55–65','65+']},
+  {id:'gender', text:"What's their gender?", options:['Woman','Man','Non-binary']},
+  {id:'role', text:'What is their job type?', options:['Solo entrepreneur or founder','Manager or team lead','Executive or senior decision-maker']},
+  {id:'pain', text:"What's their biggest pain point when they find you?", options:["They're overwhelmed and need it handled","They know what they want but lack the time or skill","They've been burned by someone before"]},
+  {id:'value', text:'What do they value most when choosing who to work with?', options:['Speed and responsiveness','Deep expertise and quality','Trust and relationship']},
+  {id:'decide', text:'How do they make decisions?', options:['Fast, gut-driven','Careful, researches everything first','Needs buy-in from others']},
+  {id:'why', text:'Why would they choose you over a competitor?', options:['Better results','Better experience or relationship','Better value or price']}
+];
+
+const INTERVIEW_QUESTIONS = [
+  {id:'persona', prompt:"If your brand were a person walking into a room, how would they act — confident and bold, or warm and easygoing?"},
+  {id:'formality', prompt:'How formal is your writing usually — buttoned-up, conversational, or somewhere in between?'},
+  {id:'banned', prompt:"Any jargon, buzzwords, or phrases you never want to see in your business's writing?"},
+  {id:'threewords', prompt:"What are 2-3 words you'd love customers to use to describe you?"},
+  {id:'coremessage', prompt:'What\'s the single most important message you want every customer to walk away understanding?'},
+  {id:'pillar', prompt:"Besides your values, what's a theme your marketing or conversations keep coming back to?"},
+  {id:'competitor', prompt:"Who's your biggest competitor or alternative, and what do you do differently?"},
+  {id:'origin', prompt:'What\'s the origin story — why did you start this business?'},
+  {id:'moment', prompt:"What's a moment or story that captures what this business is really about?"},
+  {id:'colors', prompt:'Do you already have brand colors, or a color feeling in mind? Describe it, even loosely — or say "not yet" and we\'ll suggest some.'},
+  {id:'fonts', prompt:'Do you have a logo or font style already, or should we suggest a direction?'},
+  {id:'dodont', prompt:"Give an example of something you'd say to a client — and something you'd never say."},
+  {id:'neverdo', prompt:'What\'s one thing this brand should never do, visually or verbally?'},
+  {id:'anything', prompt:'Anything else you want baked into your brand guide?'}
+];
+
+class Component extends DCLogic {
+  state = defaultState();
+
+  applyTheme(){
+    document.documentElement.setAttribute('data-theme', this.state.theme === 'dark' ? 'dark' : 'light');
+  }
+  componentDidUpdate(_, prevState){
+    if(prevState.theme !== this.state.theme) this.applyTheme();
+  }
+  onToggleTheme = () => {
+    this.setState(s => ({theme: s.theme === 'dark' ? 'light' : 'dark'}), () => this.applyTheme());
+  };
+  componentDidMount(){
+    this.applyTheme();
+    try{
+      const saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if(saved){ saved.sendingToGhl = false; }
+      if(saved) this.setState(saved, () => {
+        if(this.state.screen==='statement' && !this.state.missionStatement && !this.state.generatingStatement) this.generateStatement();
+      });
+    }catch(e){}
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SR){
+      this.recognition = new SR();
+      this.recognition.continuous = false;
+      this.recognition.interimResults = false;
+      this.recognition.onresult = (e) => {
+        const t = e.results[0][0].transcript;
+        this.setState({interviewDraft: (this.state.interviewDraft ? this.state.interviewDraft+' ' : '') + t, micListening:false});
+      };
+      this.recognition.onend = () => { this.setState({micListening:false}); };
+      this.recognition.onerror = () => { this.setState({micListening:false}); };
+    }
+  }
+  componentDidUpdate(prevState){
+    const {dragIndex, swipeDragging, sendingToGhl, ...persist} = this.state;
+    localStorage.setItem(STORE_KEY, JSON.stringify(persist));
+    if(this.state.visualOptions && this.state.visualOptions !== prevState.visualOptions){
+      this.loadFontPreviews(this.state.visualOptions.fontPairings);
+    }
+  }
+
+  resetAll = () => { this.setState(defaultState()); };
+
+  // ---- life review ----
+  addLifeItem = (col) => {
+    const draft = this.state.colDrafts[col].trim();
+    if(!draft) return;
+    const lifeData = this.state.lifeData.slice();
+    const area = {...lifeData[this.state.lifeSubIdx]};
+    area[col] = area[col].concat(draft);
+    lifeData[this.state.lifeSubIdx] = area;
+    this.setState({lifeData, colDrafts: {...this.state.colDrafts, [col]: ''}});
+  };
+  removeLifeItem = (col, idx) => {
+    const lifeData = this.state.lifeData.slice();
+    const area = {...lifeData[this.state.lifeSubIdx]};
+    area[col] = area[col].filter((_,i)=>i!==idx);
+    lifeData[this.state.lifeSubIdx] = area;
+    this.setState({lifeData});
+  };
+
+  // ---- brainstorm ----
+  toggleCurated = (id) => {
+    const has = this.state.selectedIds.includes(id);
+    this.setState({selectedIds: has ? this.state.selectedIds.filter(x=>x!==id) : this.state.selectedIds.concat(id)});
+  };
+  addCustom = () => {
+    const label = this.state.customDraft.trim();
+    if(!label) return;
+    const id = 'c'+Date.now();
+    this.setState({customItems: this.state.customItems.concat({id,label}), customDraft:''});
+  };
+  removeCustom = (id) => { this.setState({customItems: this.state.customItems.filter(c=>c.id!==id)}); };
+
+  getSelectedLabels = () => {
+    const curated = CURATED.filter(v=>this.state.selectedIds.includes(v.id)).map(v=>v.label);
+    const custom = this.state.customItems.map(c=>c.label);
+    return curated.concat(custom);
+  };
+
+  // ---- narrow (swipe) ----
+  shuffle = (arr) => {
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  };
+  onStartNarrowRound = () => {
+    this.setState({narrowIntroSeen:true, round:1, swipeQueue: this.shuffle(this.getSelectedLabels()), swipeIndex:0, kept:[], discarded:[], swipeDragX:0});
+  };
+  commitSwipeDecision = (isKeep) => {
+    const st = this.state;
+    if(st.swipeIndex >= st.swipeQueue.length) return;
+    const label = st.swipeQueue[st.swipeIndex];
+    const kept = isKeep ? st.kept.concat(label) : st.kept;
+    const newIndex = st.swipeIndex+1;
+    if(newIndex >= st.swipeQueue.length && kept.length >= 8){
+      this.setState({swipeQueue: this.shuffle(kept), swipeIndex:0, kept:[], discarded:[], round: st.round+1, swipeDragX:0, swipeDragging:false});
+    } else {
+      this.setState({kept, swipeIndex:newIndex, swipeDragX:0, swipeDragging:false});
+    }
+  };
+  onKeep = () => this.commitSwipeDecision(true);
+  onDiscard = () => this.commitSwipeDecision(false);
+  onCardPointerDown = (e) => { this.setState({swipeDragging:true, dragStartX: e.clientX}); };
+  onCardPointerMove = (e) => {
+    if(!this.state.swipeDragging) return;
+    this.setState({swipeDragX: e.clientX - this.state.dragStartX});
+  };
+  onCardPointerUp = () => {
+    const x = this.state.swipeDragX;
+    if(!this.state.swipeDragging){ return; }
+    if(x > 100){ this.commitSwipeDecision(true); return; }
+    if(x < -100){ this.commitSwipeDecision(false); return; }
+    this.setState({swipeDragX:0, swipeDragging:false});
+  };
+
+  // ---- rank ----
+  enterRank = () => {
+    const list = this.state.kept.length ? this.state.kept : this.getSelectedLabels();
+    this.setState({rankList: list, topCount: Math.max(3,Math.min(10,list.length))});
+  };
+  moveItem = (idx, dir) => {
+    const to = idx + dir;
+    const list = this.state.rankList.slice();
+    if(to<0 || to>=list.length) return;
+    [list[idx], list[to]] = [list[to], list[idx]];
+    this.setState({rankList: list});
+  };
+  setTopCount = (e) => { this.setState({topCount: parseInt(e.target.value,10)}); };
+
+  // ---- statement ----
+  setNote = (label, e) => {
+    this.setState({statementNotes: {...this.state.statementNotes, [label]: e.target.value}});
+  };
+  doPrint = () => { window.print(); };
+  onEmailChange = (e) => { this.setState({emailValue: e.target.value, emailSent:false}); };
+  onSendEmail = () => {
+    if(!this.state.emailValue.includes('@')) return;
+    this.setState({emailSent:true});
+  };
+  onGoToPerfectClient = () => { this.setState({screen:'perfectclient'}); };
+  pcSetName = (idx, e) => {
+    const personas = (this.state.pcPersonas||[{name:'',answers:{},otherValues:{},otherActive:{}}]).slice();
+    personas[idx] = {...personas[idx], name: e.target.value};
+    this.setState({pcPersonas: personas});
+  };
+  pcSelect = (idx, qid, label) => {
+    const personas = (this.state.pcPersonas||[{name:'',answers:{},otherValues:{},otherActive:{}}]).slice();
+    const p = personas[idx];
+    personas[idx] = {...p, answers: {...p.answers, [qid]: label}, otherActive: {...p.otherActive, [qid]: false}};
+    this.setState({pcPersonas: personas});
+  };
+  pcSelectOther = (idx, qid) => {
+    const personas = (this.state.pcPersonas||[{name:'',answers:{},otherValues:{},otherActive:{}}]).slice();
+    const p = personas[idx];
+    personas[idx] = {...p, otherActive: {...p.otherActive, [qid]: true}, answers: {...p.answers, [qid]: p.otherValues[qid] || ''}};
+    this.setState({pcPersonas: personas});
+  };
+  pcOtherChange = (idx, qid, e) => {
+    const val = e.target.value;
+    const personas = (this.state.pcPersonas||[{name:'',answers:{},otherValues:{},otherActive:{}}]).slice();
+    const p = personas[idx];
+    personas[idx] = {...p, otherValues: {...p.otherValues, [qid]: val}, answers: {...p.answers, [qid]: val}};
+    this.setState({pcPersonas: personas});
+  };
+  pcAddSecond = () => {
+    if((this.state.pcPersonas||[]).length >= 2) return;
+    this.setState({pcPersonas: (this.state.pcPersonas||[{name:'',answers:{},otherValues:{},otherActive:{}}]).concat([{name:'', answers:{}, otherValues:{}, otherActive:{}}])});
+  };
+  pcRemoveSecond = () => { this.setState({pcPersonas: (this.state.pcPersonas||[]).slice(0,1)}); };
+  onContinueFromPc = () => { this.setState({screen:'wrapup'}); };
+
+  // ---- business details ----
+  onGoToBizDetails = () => { this.setState({screen:'bizdetails'}); };
+  setBizField = (key, e) => { this.setState({biz: {...this.state.biz, [key]: e.target.value}}); };
+  chooseReachType = (val) => { this.setState({biz: {...this.state.biz, reachType: val}}); };
+  setFaq = (idx, key, e) => {
+    const faqs = this.state.faqs.slice();
+    faqs[idx] = {...faqs[idx], [key]: e.target.value};
+    this.setState({faqs});
+  };
+  addFaq = () => { this.setState({faqs: this.state.faqs.concat([{q:'', a:''}])}); };
+  removeFaq = (idx) => { this.setState({faqs: this.state.faqs.filter((_,i)=>i!==idx)}); };
+  onContinueFromBizDetails = () => { this.onStartInterview(); };
+
+  // ---- brand voice interview ----
+  onStartInterview = () => {
+    if(this.state.interviewMessages.length===0){
+      this.setState({screen:'interview', interviewMessages:[{role:'bot', text: INTERVIEW_QUESTIONS[0].prompt}]});
+    } else {
+      this.setState({screen:'interview'});
+    }
+  };
+  onInterviewDraftChange = (e) => { this.setState({interviewDraft: e.target.value}); };
+  onInterviewKeyDown = (e) => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); this.sendInterviewAnswer(); } };
+  onToggleTypeInstead = () => { this.setState({showTypeInput: !this.state.showTypeInput}); };
+  onMicToggle = () => {
+    if(!this.recognition) return;
+    if(this.state.micListening){ this.recognition.stop(); this.setState({micListening:false}); }
+    else { this.setState({micListening:true}); try{ this.recognition.start(); }catch(e){} }
+  };
+  sendInterviewAnswer = () => {
+    const st = this.state;
+    const draft = st.interviewDraft.trim();
+    if(!draft) return;
+    const q = INTERVIEW_QUESTIONS[st.interviewIdx];
+    const messages = st.interviewMessages.concat([{role:'user', text: draft}]);
+    const answers = {...st.interviewAnswers, [q.id]: draft};
+    const nextIdx = st.interviewIdx + 1;
+    if(nextIdx < INTERVIEW_QUESTIONS.length){
+      messages.push({role:'bot', text: INTERVIEW_QUESTIONS[nextIdx].prompt});
+      this.setState({interviewMessages: messages, interviewAnswers: answers, interviewIdx: nextIdx, interviewDraft:'', showTypeInput:false});
+    } else {
+      this.setState({interviewMessages: messages, interviewAnswers: answers, interviewIdx: nextIdx, interviewDraft:'', showTypeInput:false});
+      this.generateVisualOptions(answers);
+    }
+  };
+  generateVisualOptions = async (answers) => {
+    this.setState({generatingVisual:true, visualError:''});
+    const st = this.state;
+    const colorsAnswer = answers.colors || '';
+    const fontsAnswer = answers.fonts || '';
+    try{
+      const prompt = `You are a brand designer suggesting visual identity directions for a small business.
+Business name: "${st.businessName || 'This business'}"
+Core values: ${st.rankList.slice(0, st.topCount).join(', ')}
+Brand personality: ${answers.persona || ''}
+What they said about colors: "${colorsAnswer}"
+What they said about fonts/logo: "${fontsAnswer}"
+
+Produce ONLY valid JSON (no markdown) in this exact shape:
+{
+  "palettes": [
+    [{"hex":"#RRGGBB","name":"...","role":"Primary"}, {"hex":"#RRGGBB","name":"...","role":"Accent"}, {"hex":"#RRGGBB","name":"...","role":"Neutral"}, {"hex":"#RRGGBB","name":"...","role":"Neutral Dark"}],
+    [... a second distinct cohesive palette, same shape ...],
+    [... a third distinct cohesive palette, same shape ...]
+  ],
+  "fontPairings": [
+    {"heading":"real Google Font name","body":"real Google Font name","rationale":"1 sentence why"},
+    {"heading":"...","body":"...","rationale":"..."},
+    {"heading":"...","body":"...","rationale":"..."}
+  ],
+  "logoConcept": "2-3 sentence description of a logo mark/wordmark direction — a concept, not a design"
+}
+If they already described real colors or fonts, make one of the three options closely reflect that description, and offer two alternate directions.`;
+      const text = await window.claude.complete({messages:[{role:'user', content: prompt}], max_tokens: 2000});
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      this.setState({visualOptions: parsed, generatingVisual:false, chosenPaletteIdx:0, chosenFontIdx:0, screen:'visual'});
+    }catch(e){
+      this.setState({generatingVisual:false, visualError: "Couldn't generate visual suggestions. Check your connection and try again."});
+    }
+  };
+  onRetryVisual = () => { this.generateVisualOptions(this.state.interviewAnswers); };
+  loadFontPreviews = (pairings) => {
+    try{
+      const families = new Set();
+      (pairings||[]).forEach(p => { if(p.heading) families.add(p.heading); if(p.body) families.add(p.body); });
+      families.forEach(name => {
+        const id = 'gf-'+name.replace(/[^a-z0-9]/gi,'-');
+        if(document.getElementById(id)) return;
+        const link = document.createElement('link');
+        link.id = id; link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=' + name.replace(/ /g,'+') + ':wght@400;700&display=swap';
+        document.head.appendChild(link);
+      });
+    }catch(e){ console.error('loadFontPreviews failed', e); }
+  };
+  onChoosePalette = (idx) => { this.setState({chosenPaletteIdx: idx}); };
+  onChooseFont = (idx) => { this.setState({chosenFontIdx: idx}); };
+  onRegenerateLogo = async () => {
+    const st = this.state;
+    this.setState({regeneratingLogo:true});
+    try{
+      const prompt = `Suggest a different logo concept direction (2-3 sentences, a concept not a design) for a business named "${st.businessName||'this business'}" with values ${st.rankList.slice(0,st.topCount).join(', ')} and brand personality: ${st.interviewAnswers.persona||''}. Return only the description text, no JSON, no quotes.`;
+      const text = await window.claude.complete(prompt);
+      this.setState({visualOptions: {...st.visualOptions, logoConcept: text.trim()}, regeneratingLogo:false});
+    }catch(e){ this.setState({regeneratingLogo:false}); }
+  };
+  onContinueFromVisual = () => {
+    const st = this.state;
+    const palette = st.visualOptions.palettes[st.chosenPaletteIdx];
+    const font = st.visualOptions.fontPairings[st.chosenFontIdx];
+    this.generateGuide(st.interviewAnswers, {colors: palette, headingFont: font.heading, bodyFont: font.body, fontRationale: font.rationale, logoConcept: st.visualOptions.logoConcept});
+  };
+  generateGuide = async (answers, chosenVisual) => {
+    const st = this.state;
+    this.setState({generatingGuide:true, guideError:''});
+    const topLabels = st.rankList.slice(0, st.topCount);
+    const personas = (st.pcPersonas||[]).filter(p=>p.name && p.name.trim());
+    const personaSummary = personas.map(p => `${p.name}: ${PC_QUESTIONS.map(q=>`${q.text} ${p.answers[q.id]||''}`).join(' | ')}`).join('\n');
+    const interviewSummary = INTERVIEW_QUESTIONS.map(q => `${q.prompt} => ${answers[q.id]||''}`).join('\n');
+    try{
+      const prompt = `You are a brand strategist producing a full brand guide for a small business, usable both as a printable brand guide and as training material for staff/AI agents.
+Business name: "${st.businessName || 'This business'}"
+Core values (ranked): ${topLabels.join(', ')}
+Mission statement: "${st.missionStatement}"
+Perfect client persona(s):
+${personaSummary || 'Not defined'}
+Brand voice interview answers:
+${interviewSummary}
+
+Produce a JSON object (no markdown, no commentary) with exactly this shape:
+{
+  "toneSummary": "2-3 sentence description of the brand's voice and personality",
+  "vocabularyUse": ["word or phrase to use", ...4-8 items],
+  "vocabularyAvoid": ["word, phrase or jargon to avoid", ...3-6 items],
+  "messagingPillars": [{"title":"short pillar name","desc":"1-2 sentence explanation"}, ...3-4 items],
+  "differentiation": "2-3 sentences on how this business is different from alternatives",
+  "originStory": "3-4 sentence origin story in brand voice, grounded in their answers",
+  "doDont": [{"do":"an example phrase or behavior to do","dont":"the corresponding thing to avoid"}, ...3-4 items grounded in their answers]
+}`;
+      const text = await window.claude.complete({messages:[{role:'user', content: prompt}], max_tokens: 3000});
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      parsed.visual = chosenVisual;
+      this.setState({guide: parsed, generatingGuide:false, screen:'guide'});
+    }catch(e){
+      this.setState({generatingGuide:false, guideError: "Couldn't generate the brand guide. Check your connection and try again."});
+    }
+  };
+  onRetryGuide = () => { this.onContinueFromVisual(); };
+  buildExportData = () => {
+    const st = this.state;
+    const topLabels = st.rankList.slice(0, st.topCount);
+    return {
+      businessName: st.businessName,
+      values: topLabels.map(label => ({label, description: st.statementNotes[label] || ''})),
+      missionStatement: st.missionStatement,
+      essential: st.reflEssential, avoid: st.reflAvoid, threeYearVision: st.reflThreeYear,
+      promise: {action: st.reflAction, byWhen: st.reflByWhen},
+      perfectClients: (st.pcPersonas||[]).filter(p=>p.name && p.name.trim()).map(p => ({
+        name: p.name,
+        attributes: PC_QUESTIONS.reduce((acc,q)=>{ acc[q.id] = p.answers[q.id] || ''; return acc; }, {})
+      })),
+      businessDetails: {...st.biz, faqs: st.faqs.filter(f=>f.q.trim()||f.a.trim())},
+      brandVoice: {
+        toneSummary: st.guide ? st.guide.toneSummary : '',
+        vocabularyUse: st.guide ? st.guide.vocabularyUse : [],
+        vocabularyAvoid: st.guide ? st.guide.vocabularyAvoid : [],
+        messagingPillars: st.guide ? st.guide.messagingPillars : [],
+        differentiation: st.guide ? st.guide.differentiation : '',
+        originStory: st.guide ? st.guide.originStory : '',
+        doDont: st.guide ? st.guide.doDont : [],
+        interviewAnswers: st.interviewAnswers
+      },
+      visualIdentity: st.guide ? st.guide.visual : null
+    };
+  };
+  onExportJson = () => {
+    const st = this.state;
+    const data = this.buildExportData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(st.businessName||'business').replace(/[^a-z0-9]+/gi,'-').toLowerCase()}-brand-guide.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+  buildGhlPayload = () => {
+    const st = this.state;
+    const contact = st.contact || {};
+    const nameParts = (contact.yourName || '').trim().split(/\s+/).filter(Boolean);
+    const exportData = this.buildExportData();
+    return {
+      firstName: nameParts[0] || '',
+      lastName: nameParts.slice(1).join(' ') || '',
+      email: contact.email || '',
+      phone: contact.phone || '',
+      website: contact.website || '',
+      social: contact.social || '',
+      "COMPLETE JSON PACKAGE": JSON.stringify(exportData, null, 2)
+    };
+  };
+  onGhlWebhookUrlChange = (e) => this.setState({ghlWebhookUrl: e.target.value});
+  onSendToGhl = async () => {
+    const url = (this.state.ghlWebhookUrl || '').trim();
+    if(!url) return;
+    this.setState({sendingToGhl: true, ghlSendStatus: ''});
+    const data = this.buildGhlPayload();
+    const withTimeout = (p, ms) => Promise.race([p, new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), ms))]);
+    try{
+      const res = await withTimeout(fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      }), 10000);
+      this.setState({sendingToGhl: false, ghlSendStatus: res.ok ? 'sent' : 'error'});
+    }catch(err){
+      try{
+        await withTimeout(fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)}), 10000);
+        this.setState({sendingToGhl: false, ghlSendStatus: 'sent'});
+      }catch(err2){
+        this.setState({sendingToGhl: false, ghlSendStatus: 'error'});
+      }
+    }
+  };
+  scrollGuideTo = (id) => {
+    const cont = document.getElementById('guide-scroll');
+    const target = document.getElementById(id);
+    if(!cont || !target) return;
+    const contRect = cont.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    cont.scrollTo({top: cont.scrollTop + (targetRect.top - contRect.top) - 8, behavior:'smooth'});
+  };
+  generateStatement = async () => {
+    const st = this.state;
+    const topLabels = st.rankList.slice(0, st.topCount);
+    this.setState({generatingStatement:true, generateError:''});
+    try{
+      const prompt = `You are helping a business owner write a values statement. Business name: "${st.businessName || 'This business'}". Core values, ranked: ${topLabels.join(', ')}. Context from their reflection \u2014 essential: "${st.reflEssential}"; must avoid: "${st.reflAvoid}"; 3-year vision: "${st.reflThreeYear}".
+Write:
+1. A short, warm mission-style paragraph (3-5 sentences) naming the business, what kind of business it is, and why these values matter to it \u2014 specific and concrete, not generic corporate language.
+2. For each of the ${topLabels.length} values, a rich 1-2 sentence description (15-30 words) of what that value means specifically for THIS business, grounded in their reflection answers where relevant.
+Return ONLY valid JSON, no markdown, in this exact shape:
+{"mission": "...", "values": [{"label": "value name exactly as given", "description": "..."}]}`;
+      const text = await window.claude.complete(prompt);
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+      const notes = {};
+      (parsed.values || []).forEach(v => { notes[v.label] = v.description; });
+      this.setState({missionStatement: parsed.mission || '', statementNotes: notes, generatingStatement:false});
+    }catch(e){
+      this.setState({generatingStatement:false, generateError: "Couldn't generate the statement. Check your connection and try again."});
+    }
+  };
+
+  onNext = () => {
+    const s = this.state.screen;
+    if(s==='intro'){ this.setState({screen:'welcome'}); return; }
+    if(s==='welcome'){ this.setState({screen:'lifereview', lifeSubIdx:0}); return; }
+    if(s==='lifereview'){
+      if(this.state.lifeSubIdx < 5){ this.setState({lifeSubIdx: this.state.lifeSubIdx+1, colDrafts:{love:'',like:'',tolerate:'',dislike:''}}); }
+      else { this.setState({screen:'brainstorm'}); }
+      return;
+    }
+    if(s==='brainstorm'){ this.setState({screen:'narrow', narrowIntroSeen:false}); return; }
+    if(s==='narrow'){ this.enterRank(); this.setState({screen:'rank'}); return; }
+    if(s==='rank'){ this.setState({screen:'reflection'}); return; }
+    if(s==='reflection'){
+      this.setState({screen:'statement'});
+      if(!this.state.missionStatement && !this.state.generatingStatement) this.generateStatement();
+      return;
+    }
+  };
+  onBack = () => {
+    const s = this.state.screen;
+    if(s==='lifereview'){
+      if(this.state.lifeSubIdx>0){ this.setState({lifeSubIdx: this.state.lifeSubIdx-1}); }
+      else { this.setState({screen:'welcome'}); }
+      return;
+    }
+    if(s==='welcome'){ this.setState({screen:'intro'}); return; }
+    if(s==='brainstorm'){ this.setState({screen:'lifereview', lifeSubIdx:5}); return; }
+    if(s==='narrow'){ this.setState({screen:'brainstorm'}); return; }
+    if(s==='rank'){ this.setState({screen:'narrow'}); return; }
+    if(s==='reflection'){ this.setState({screen:'rank'}); return; }
+  };
+
+  renderVals(){
+    const st = this.state;
+    const screen = st.screen;
+    const isLifeArea = st.lifeSubIdx < 5;
+
+    const lifeColumns = isLifeArea ? COL_DEFS.map(cd => {
+      const area = st.lifeData[st.lifeSubIdx];
+      return {
+        title: cd.title, color: cd.color,
+        draft: st.colDrafts[cd.key],
+        onChange: (e)=> this.setState({colDrafts:{...st.colDrafts,[cd.key]:e.target.value}}),
+        onKeyDown: (e)=>{ if(e.key==='Enter') this.addLifeItem(cd.key); },
+        onAdd: ()=> this.addLifeItem(cd.key),
+        items: area[cd.key].map((text,i)=>({text, onRemove: ()=>this.removeLifeItem(cd.key,i)}))
+      };
+    }) : [];
+
+    const selectedChips = CURATED.filter(v=>st.selectedIds.includes(v.id)).map(v=>({label:v.label, onRemove:()=>this.toggleCurated(v.id)}))
+      .concat(st.customItems.map(c=>({label:c.label, onRemove:()=>this.removeCustom(c.id)})));
+    const curatedChips = CURATED.map(v=>{
+      const sel = st.selectedIds.includes(v.id);
+      return {label:v.label, className: sel? 'tag tag-accent':'tag tag-outline', onToggle: ()=>this.toggleCurated(v.id)};
+    });
+
+    const showNarrowIntro = screen==='narrow' && !st.narrowIntroSeen;
+    const narrowMainVisible = screen==='narrow' && st.narrowIntroSeen;
+    const queue = st.swipeQueue;
+    const swipeActive = narrowMainVisible && st.swipeIndex < queue.length;
+    const dragX = st.swipeDragX;
+    const rot = dragX/18;
+    const peek = [0,1,2].map(o=>queue[st.swipeIndex+o]).filter(l=>l!==undefined);
+    const stackCards = peek.map((label,i)=>{
+      const isFront = i===0;
+      const transform = isFront ? `translateX(${dragX}px) rotate(${rot}deg)` : `translateY(${i*10}px) scale(${1-i*0.04})`;
+      return {
+        label, z: 10-i,
+        transform,
+        transition: isFront && st.swipeDragging ? 'none' : 'transform 0.25s ease',
+        opacity: isFront ? 1 : 1-i*0.15,
+        isFront,
+        keepOpacity: isFront ? Math.min(Math.max(dragX/80,0),1) : 0,
+        discardOpacity: isFront ? Math.min(Math.max(-dragX/80,0),1) : 0,
+        onDown: isFront ? this.onCardPointerDown : (()=>{}),
+        onMove: isFront ? this.onCardPointerMove : (()=>{}),
+        onUp: isFront ? this.onCardPointerUp : (()=>{})
+      };
+    });
+    const roundProgressPct = queue.length ? Math.round(st.swipeIndex/queue.length*100) : 0;
+    const passMessage = st.kept.length<=5 ? "That's a tight, powerful set." : (st.kept.length<=7 ? 'A solid, workable set.' : '');
+
+    const rankItems = st.rankList.map((label,i)=>{
+      const inTop = i < st.topCount;
+      return {
+        label, num: i+1,
+        numColor: inTop ? 'var(--color-accent)' : 'var(--color-neutral-500)',
+        opacity: inTop ? 1 : 0.5,
+        bg: 'transparent',
+        borderStyle: (i===st.topCount-1) ? '2px solid var(--color-accent)' : '2px solid var(--color-neutral-300)',
+        isFirst: i===0, isLast: i===st.rankList.length-1,
+        onUp: ()=> this.moveItem(i,-1),
+        onDown: ()=> this.moveItem(i,1)
+      };
+    });
+
+    const topLabels = st.rankList.slice(0, st.topCount);
+    const statementValues = topLabels.map((label,i)=>{
+      const curated = CURATED.find(v=>v.label===label);
+      const defaultNote = curated ? curated.def : '';
+      const note = st.statementNotes[label] !== undefined ? st.statementNotes[label] : defaultNote;
+      return {label, num:i+1, note};
+    });
+
+    const stepMap = {intro:{n:0,label:'Get Started'}, welcome:{n:0,label:'Get Started'}, lifereview:{n:1,label:'Step 1 · Life Experience Review'}, brainstorm:{n:2,label:'Step 2 · Brainstorm'}, narrow:{n:3,label:'Step 3 · Narrow'}, rank:{n:4,label:'Step 4 · Rank'}, reflection:{n:5,label:'Step 5 · Reflect'}, statement:{n:6,label:'Your Values Statement'}, perfectclient:{n:7,label:'Step 6 · Perfect Client'}, wrapup:{n:8,label:'All Set'}, bizdetails:{n:9,label:'Step 7 · Business Details'}, interview:{n:10,label:'Step 8 · Brand Voice Interview'}, visual:{n:11,label:'Step 9 · Visual Identity'}, guide:{n:12,label:'Your Brand Guide'}};
+    const cur = stepMap[screen];
+    const progressPct = Math.round((cur.n/12)*100);
+
+    const nextLabelMap = {lifereview: isLifeArea ? 'Next' : 'Continue to Brainstorm', brainstorm:'Start Narrowing', narrow:'Continue to Ranking', rank:'Continue to Reflection', reflection:'Create My Values Statement'};
+    const nextDisabled = (screen==='brainstorm' && this.getSelectedLabels().length < 5) || (screen==='rank' && st.rankList.length===0);
+    const showFooterFinal = screen!=='intro' && screen!=='welcome' && screen!=='statement' && screen!=='perfectclient' && screen!=='wrapup' && screen!=='interview' && screen!=='guide' && screen!=='visual' && screen!=='bizdetails' && !(screen==='narrow' && (showNarrowIntro || swipeActive));
+    const pcPersonas = st.pcPersonas || [{name:'', answers:{}, otherValues:{}, otherActive:{}}];
+    const questionAnswered = (p, qid) => !!(p.answers[qid] && p.answers[qid].trim());
+    const personaComplete = (p) => !!(p.name && p.name.trim()) && PC_QUESTIONS.every(q => questionAnswered(p, q.id));
+    const pcContinueDisabled = !personaComplete(pcPersonas[0]);
+    const pcPersonaBlocks = pcPersonas.map((p, idx) => ({
+      heading: idx===0 ? 'Dream Client #1' : 'Dream Client #2 (optional)',
+      name: p.name,
+      onNameChange: (e) => this.pcSetName(idx, e),
+      showRemove: idx===1,
+      questions: PC_QUESTIONS.map(q => {
+        const otherActive = !!p.otherActive[q.id];
+        const selected = p.answers[q.id];
+        return {
+          text: q.text,
+          options: q.options.map(label => ({
+            label,
+            className: (!otherActive && selected===label) ? 'tag tag-accent' : 'tag tag-outline',
+            onSelect: () => this.pcSelect(idx, q.id, label)
+          })),
+          otherClassName: otherActive ? 'tag tag-accent' : 'tag tag-outline',
+          onSelectOther: () => this.pcSelectOther(idx, q.id),
+          showOtherInput: otherActive,
+          otherValue: p.otherValues[q.id] || '',
+          onOtherChange: (e) => this.pcOtherChange(idx, q.id, e)
+        };
+      })
+    }));
+
+    return {
+      showIntro: screen==='intro',
+      showWelcome: screen==='welcome', showLifeReview: screen==='lifereview', showBrainstorm: screen==='brainstorm',
+      showNarrow: screen==='narrow', showRank: screen==='rank', showReflection: screen==='reflection', showStatement: screen==='statement',
+      stepLabel: cur.label, progressPct,
+      onToggleTheme: this.onToggleTheme, themeLabel: st.theme === 'dark' ? 'Light' : 'Dark',
+      isLifeArea, isLifeSynthesis: !isLifeArea,
+      currentAreaLabel: LIFE_AREAS[st.lifeSubIdx], lifeColumns,
+      lifeAreaDisplayNum: Math.min(st.lifeSubIdx+1,6),
+      themesNote: st.themesNote, onThemesChange: (e)=>this.setState({themesNote:e.target.value}),
+      dislikeNote: st.dislikeNote, onDislikeChange: (e)=>this.setState({dislikeNote:e.target.value}),
+      selectedCount: this.getSelectedLabels().length, hasSelection: this.getSelectedLabels().length>0, noSelection: this.getSelectedLabels().length===0,
+      selectedChips, curatedChips,
+      customDraft: st.customDraft, onCustomChange: (e)=>this.setState({customDraft:e.target.value}),
+      onCustomKeyDown: (e)=>{ if(e.key==='Enter') this.addCustom(); }, onCustomAdd: this.addCustom,
+      contact: st.contact,
+      onContactYourNameChange: (e)=>this.setState({contact:{...st.contact, yourName: e.target.value}}),
+      onContactPhoneChange: (e)=>this.setState({contact:{...st.contact, phone: e.target.value}}),
+      onContactEmailChange: (e)=>this.setState({contact:{...st.contact, email: e.target.value}}),
+      onContactBusinessNameChange: (e)=>this.setState({contact:{...st.contact, businessName: e.target.value}}),
+      onContactWebsiteChange: (e)=>this.setState({contact:{...st.contact, website: e.target.value}}),
+      onContactSocialChange: (e)=>this.setState({contact:{...st.contact, social: e.target.value}}),
+      onIntroNext: this.onNext,
+      introComplete: !!(st.contact.yourName && st.contact.yourName.trim() && st.contact.email && st.contact.email.trim() && st.contact.businessName && st.contact.businessName.trim()),
+      showNarrowIntro, narrowMainVisible, deckSize: this.getSelectedLabels().length, onStartNarrowRound: this.onStartNarrowRound,
+      round: st.round, roundPositionLabel: swipeActive ? `${Math.min(st.swipeIndex+1,queue.length)} of ${queue.length}` : '', roundProgressPct, passMessage,
+      swipeActive, stackCards,
+      onCardPointerDown: this.onCardPointerDown, onCardPointerMove: this.onCardPointerMove, onCardPointerUp: this.onCardPointerUp,
+      onKeep: this.onKeep, onDiscard: this.onDiscard,
+      swipeRoundDone: narrowMainVisible && !swipeActive,
+      keptCount: st.kept.length,
+      keptChipsDisplay: st.kept.map(l=>({label:l})),
+      rankItems, topCount: st.topCount, onTopCountChange: this.setTopCount,
+      reflLearned: st.reflLearned, onReflLearned: (e)=>this.setState({reflLearned:e.target.value}),
+      reflSurprises: st.reflSurprises, onReflSurprises: (e)=>this.setState({reflSurprises:e.target.value}),
+      reflStop: st.reflStop, onReflStop: (e)=>this.setState({reflStop:e.target.value}),
+      reflLess: st.reflLess, onReflLess: (e)=>this.setState({reflLess:e.target.value}),
+      reflMore: st.reflMore, onReflMore: (e)=>this.setState({reflMore:e.target.value}),
+      reflContinue: st.reflContinue, onReflContinue: (e)=>this.setState({reflContinue:e.target.value}),
+      reflStart: st.reflStart, onReflStart: (e)=>this.setState({reflStart:e.target.value}),
+      reflEssential: st.reflEssential, onReflEssential: (e)=>this.setState({reflEssential:e.target.value}),
+      reflAvoid: st.reflAvoid, onReflAvoid: (e)=>this.setState({reflAvoid:e.target.value}),
+      reflThreeYear: st.reflThreeYear, onReflThreeYear: (e)=>this.setState({reflThreeYear:e.target.value}),
+      reflAction: st.reflAction, onReflAction: (e)=>this.setState({reflAction:e.target.value}),
+      reflByWhen: st.reflByWhen, onReflByWhen: (e)=>this.setState({reflByWhen:e.target.value}),
+      reflEssentialDisplay: st.reflEssential || '—', reflAvoidDisplay: st.reflAvoid || '—',
+      reflActionDisplay: st.reflAction || 'No action set yet', reflByWhenDisplay: st.reflByWhen || 'TBD',
+      businessName: st.businessName, onBusinessNameChange: (e)=>this.setState({businessName:e.target.value}),
+      statementValues, onPrint: this.doPrint,
+      isGeneratingStatement: st.generatingStatement, hasGenerateError: !!st.generateError, generateError: st.generateError,
+      hasMissionStatement: !!st.missionStatement && !st.generatingStatement, missionStatement: st.missionStatement,
+      needsGenerateButton: !st.missionStatement && !st.generatingStatement && !st.generateError,
+      onGenerateStatement: this.generateStatement,
+      emailValue: st.emailValue, onEmailChange: this.onEmailChange, onSendEmail: this.onSendEmail,
+      emailSent: st.emailSent, emailSendDisabled: !st.emailValue.includes('@'),
+      onGoToPerfectClient: this.onGoToPerfectClient, showPerfectClient: screen==='perfectclient',
+      showWrapup: screen==='wrapup',
+      pcPersonaBlocks, pcContinueDisabled, onContinueFromPc: this.onContinueFromPc,
+      showAddSecondPersona: pcPersonas.length===1, onAddSecondPersona: this.pcAddSecond,
+      onRemoveSecondPersona: this.pcRemoveSecond,
+      onBackFromPc: () => this.setState({screen: screen==='wrapup' ? 'perfectclient' : 'statement'}),
+      onStartInterview: this.onStartInterview,
+      showBizDetails: screen==='bizdetails',
+      biz: st.biz,
+      onBizTaglineChange: (e)=>this.setBizField('tagline', e),
+      onBizWhatYouDoChange: (e)=>this.setBizField('whatYouDo', e),
+      onBizHoursTextChange: (e)=>this.setBizField('hoursText', e),
+      onBizDaysOffChange: (e)=>this.setBizField('daysOff', e),
+      onBizLocationChange: (e)=>this.setBizField('location', e),
+      onBizAreasServedChange: (e)=>this.setBizField('areasServed', e),
+      onBizPhoneChange: (e)=>this.setBizField('phone', e),
+      onBizEmailChange: (e)=>this.setBizField('email', e),
+      onBizWebsiteChange: (e)=>this.setBizField('website', e),
+      onBizBookingLinkChange: (e)=>this.setBizField('bookingLink', e),
+      onBizPaymentMethodsChange: (e)=>this.setBizField('paymentMethods', e),
+      onBizPricingModelChange: (e)=>this.setBizField('pricingModel', e),
+      onBizPriceRangeChange: (e)=>this.setBizField('priceRange', e),
+      onBizCancellationPolicyChange: (e)=>this.setBizField('cancellationPolicy', e),
+      onBizGuaranteeChange: (e)=>this.setBizField('guarantee', e),
+      onBizTeamSizeChange: (e)=>this.setBizField('teamSize', e),
+      onBizOtherPoliciesChange: (e)=>this.setBizField('otherPolicies', e),
+      reachOptions: ['In-person only','Remote only','Both'].map(opt => ({
+        label: opt, className: st.biz.reachType===opt ? 'tag tag-accent' : 'tag tag-outline',
+        onSelect: () => this.chooseReachType(opt)
+      })),
+      reachOtherActive: st.biz.reachType==='Other',
+      reachOtherClassName: st.biz.reachType==='Other' ? 'tag tag-accent' : 'tag tag-outline',
+      onSelectReachOther: () => this.chooseReachType('Other'),
+      onReachOtherChange: (e) => this.setState({biz:{...st.biz, reachOther:e.target.value, reachType:'Other'}}),
+      faqBlocks: st.faqs.map((f,idx) => ({
+        idx, q:f.q, a:f.a,
+        onQChange: (e)=>this.setFaq(idx,'q',e), onAChange: (e)=>this.setFaq(idx,'a',e),
+        onRemove: ()=>this.removeFaq(idx), showRemove: st.faqs.length>1
+      })),
+      onAddFaq: this.addFaq, onContinueFromBizDetails: this.onContinueFromBizDetails,
+      showInterview: screen==='interview',
+      chatMessages: st.interviewMessages.map(m => ({
+        text: m.text, align: m.role==='user' ? 'flex-end' : 'flex-start',
+        bg: m.role==='user' ? 'var(--color-accent)' : 'var(--color-neutral-200)',
+        color: m.role==='user' ? '#fff' : 'var(--color-text)'
+      })),
+      chatDisplayIndex: Math.min(st.interviewIdx+1, INTERVIEW_QUESTIONS.length), chatTotal: INTERVIEW_QUESTIONS.length,
+      interviewComplete: st.interviewIdx >= INTERVIEW_QUESTIONS.length,
+      interviewInProgress: st.interviewIdx < INTERVIEW_QUESTIONS.length,
+      chatDraft: st.interviewDraft, onChatDraftChange: this.onInterviewDraftChange, onChatKeyDown: this.onInterviewKeyDown,
+      onSendAnswer: this.sendInterviewAnswer,
+      hasMic: !!this.recognition, onMicToggle: this.onMicToggle,
+      micIcon: st.micListening ? '■' : '●', micButtonStyle: st.micListening ? 'background:var(--color-accent);color:#fff;' : '',
+      micStatusText: st.micListening ? 'Listening...' : (st.interviewDraft.trim() ? 'Tap to re-record, or Send' : 'Tap to answer by voice'),
+      showTypeInput: st.showTypeInput, onToggleTypeInstead: this.onToggleTypeInstead,
+      typeToggleLabel: st.showTypeInput ? 'Hide typing' : 'Type instead',
+      chatDraftHasText: !!st.interviewDraft.trim() && !st.showTypeInput,
+      sendDisabled: !st.interviewDraft.trim(),
+      isGeneratingGuide: st.generatingGuide, hasGuideError: !!st.guideError, guideError: st.guideError, onRetryGuide: this.onRetryGuide,
+      showVisual: screen==='visual', isGeneratingVisual: st.generatingVisual, hasVisualError: !!st.visualError, visualError: st.visualError, onRetryVisual: this.onRetryVisual,
+      visualPalettes: st.visualOptions ? st.visualOptions.palettes.map((pal,idx) => ({
+        idx, colors: pal, isChosen: idx===st.chosenPaletteIdx,
+        cardStyle: idx===st.chosenPaletteIdx ? 'border:2px solid var(--color-accent);' : 'border:2px solid var(--color-neutral-300);',
+        onChoose: () => this.onChoosePalette(idx)
+      })) : [],
+      visualFontPairings: st.visualOptions ? st.visualOptions.fontPairings.map((f,idx) => ({
+        idx, heading: f.heading, body: f.body, rationale: f.rationale, isChosen: idx===st.chosenFontIdx,
+        cardStyle: idx===st.chosenFontIdx ? 'border:2px solid var(--color-accent);' : 'border:2px solid var(--color-neutral-300);',
+        headingFontStyle: `font-family:'${f.heading}',var(--font-heading);`,
+        bodyFontStyle: `font-family:'${f.body}',var(--font-body);`,
+        onChoose: () => this.onChooseFont(idx)
+      })) : [],
+      visualLogoConcept: st.visualOptions ? st.visualOptions.logoConcept : '',
+      onRegenerateLogo: this.onRegenerateLogo, regeneratingLogo: st.regeneratingLogo,
+      onContinueFromVisual: this.onContinueFromVisual, onExportJson: this.onExportJson,
+      ghlWebhookUrl: st.ghlWebhookUrl || '', onGhlWebhookUrlChange: this.onGhlWebhookUrlChange,
+      onSendToGhl: this.onSendToGhl, sendingToGhl: !!st.sendingToGhl,
+      ghlSendLabel: st.sendingToGhl ? 'Sending…' : (st.ghlSendStatus==='sent' ? 'Sent to GHL ✓' : (st.ghlSendStatus==='error' ? 'Failed — retry' : 'Create Client & Send Guide')),
+      showGuide: screen==='guide', guide: st.guide || {visual:{}},
+      hasGuide: !!st.guide,
+      guideColors: (st.guide && st.guide.visual && st.guide.visual.colors) ? st.guide.visual.colors : [],
+      guidePillars: (st.guide && st.guide.messagingPillars) ? st.guide.messagingPillars : [],
+      guideVocabUse: (st.guide && st.guide.vocabularyUse) ? st.guide.vocabularyUse : [],
+      guideVocabAvoid: (st.guide && st.guide.vocabularyAvoid) ? st.guide.vocabularyAvoid : [],
+      guideDoDont: (st.guide && st.guide.doDont) ? st.guide.doDont : [],
+      guidePersonas: pcPersonas.filter(p=>p.name && p.name.trim()),
+      scrollToValues: () => this.scrollGuideTo('sec-values'), scrollToClient: () => this.scrollGuideTo('sec-client'),
+      scrollToDetails: () => this.scrollGuideTo('sec-details'),
+      guideFaqs: (st.faqs||[]).filter(f=>f.q.trim()||f.a.trim()),
+      scrollToVoice: () => this.scrollGuideTo('sec-voice'), scrollToMessaging: () => this.scrollGuideTo('sec-messaging'),
+      scrollToVisual: () => this.scrollGuideTo('sec-visual'), scrollToDoDont: () => this.scrollGuideTo('sec-dodont'),
+      showFooter: showFooterFinal, showBackBtn: screen!=='welcome',
+      nextLabel: nextLabelMap[screen] || 'Next', nextDisabled,
+      onNext: this.onNext, onBack: this.onBack,
+      resetAll: this.resetAll
+    };
+  }
+}
+
+</script>
+</body>
+</html>
